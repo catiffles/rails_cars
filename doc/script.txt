@@ -1,0 +1,61 @@
+Creating a Rails App.
+
+1. Make sure Rails is installed. If not, install it with 'gem install rails'
+
+2. Create a new Rails app with
+      rails new hippos_app --database=postgresql
+    This creates a bare bones structure to build the app
+
+3. Start up the Rails app with
+      rails server
+    Then going to http://localhost:3000 to check up on the app whenever changes are made! Also helps with finding all the errors to fix them right away.
+
+4. Create a database with
+      rake db:create
+    This is where all info will be stored. The database is empty for now.
+
+5. Build a route so the app can process the path to /name_app by opening up the config/routes.rb file and adding
+      get 'hippos', to: 'hippos#index'
+    Now that the app can access index page, it's time to create a controller.
+
+6. We do this by 
+      touch app/controllers/hippos_controller.rb
+    In this file type in
+      class HipposController < ApplicationController
+        def index
+        end
+      end
+
+7. In order to see anything though, we need a template, by creating a view. We do this by first creating a new directory inside app/views named after the app, and creating an index.html.erb file inside the new directory. Can add some random text to test it in the browser.
+
+8. Our database is still empty, so let's create a table for the app. We do this by
+      rails generate migration CreateHippos size number_of_teeth age
+    Then
+      rake db:migrate
+
+9. We still need a model so we can access all the contents in the database. We can do this by
+      touch app/models/hippo.rb
+    Everything within the model is singular. Including the name of the file! 
+    In this new file, add 
+      class Hippo < ActiveRecord::Base
+      end
+    Awesome! Now everything should be connected.
+
+10. Now it's time to fill up the database with actual information. We do this in db/seeds.rb. An example of something you can add in this file is
+      1.upto(5) do |x|
+        Name.create(age: stuff#{x}, number_of_teeth: morestuff#{x} * 5, size: evenmorestuff#{x} * 10)
+    then rake it!
+      rake db:seed
+
+11. Back to name_controller.rb, lets fill out the empty method there with
+      @hippos = Hippos.all
+
+12. Lastly, go to app/views/name/index.html.erb that you created earlier, and fill out some information about what you want shown in the browser. For example
+      <h2>Hippos</h2>
+         <ul>
+           <% @hippos.each do |hippo| %>
+            <li><%= hippo.name %></li>
+            <% end %>
+          </ul>
+
+
